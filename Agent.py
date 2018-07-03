@@ -36,3 +36,17 @@ class Agent:
     
     def addToMemory(self,state,action,reward,nextState,done):
         self.memory.append(state,action,reward,nextState,done)
+        
+    def replay(self, batchSize):
+        batch = random.sample(self.memory,batchSize)
+        for state,action,reward,nextState,done in batch:
+            target = reward
+            if not done:
+                target = (reward + self.gamma * np.amax(self.model.
+                                predict(nextState)[0]))
+            result = self.model.predict(state)
+            result[0][action] = target
+            self.model.fit(state,target,epochs=1,verbose=0)
+        if self.epsilon > self.epsilonMini:
+            self.epsilon *= self.epsilonDecay
+        
