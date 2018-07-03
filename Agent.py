@@ -34,4 +34,5 @@ class Agent:
         actionList = self.model.predict(state)
         return np.argmax(actionList[0])
     
-    
+    def addToMemory(self,state,action,reward,nextState,done):
+        self.memory.append(state,action,reward,nextState,done)
